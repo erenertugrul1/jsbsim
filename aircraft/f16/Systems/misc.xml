@@ -1,0 +1,143 @@
+<?xml version="1.0"?>
+
+
+<system name="Miscelanous">
+
+    <property value="10">systems/buffeting/var1</property>
+    <property value="25">systems/buffeting/var2</property>
+    <property value="60">systems/buffeting/var3</property>
+    <property value="0">systems/buffeting/magnitude</property>
+
+    <channel name="Misc" execrate="16">
+
+        <fcs_function name="systems/approach-speed">
+            <description>Page A7-3 of Supplement HAF manual</description>
+            <function>
+                <table>
+                    <independentVar lookup="row">inertia/weight-lbs</independentVar>
+                    <tableData>
+                        17000 125
+                        20000 136
+                        25000 152
+                        30000 167
+                        35000 180
+                        40000 192
+                        45000 204
+                        48000 212
+                    </tableData>
+                </table>
+            </function>
+        </fcs_function>
+
+        <fcs_function name="systems/buffeting/outputy">
+            <function>
+                <product>
+                    <sum>
+                        <sin>
+                            <product>
+                                <property>simulation/sim-time-sec</property>
+                                <property>systems/buffeting/var1</property>
+                            </product>
+                        </sin>
+                        <sin>
+                            <product>
+                                <property>simulation/sim-time-sec</property>
+                                <property>systems/buffeting/var2</property>
+                            </product>
+                        </sin>
+                        <sin>
+                            <product>
+                                <property>simulation/sim-time-sec</property>
+                                <property>systems/buffeting/var3</property>
+                            </product>
+                        </sin>
+                    </sum>
+                    <property>systems/buffeting/magnitude</property>
+                </product>
+            </function>
+        </fcs_function>
+
+        <fcs_function name="systems/buffeting/outputz">
+            <function>
+                <product>
+                    <sum>
+                        <sin>
+                            <product>
+                                <property>simulation/sim-time-sec</property>
+                                <property>systems/buffeting/var1</property>
+                                <v>776.345</v>
+                            </product>
+                        </sin>
+                        <sin>
+                            <product>
+                                <property>simulation/sim-time-sec</property>
+                                <property>systems/buffeting/var2</property>
+                                <v>736.345</v>
+                            </product>
+                        </sin>
+                        <sin>
+                            <product>
+                                <property>simulation/sim-time-sec</property>
+                                <property>systems/buffeting/var3</property>
+                                <v>756.345</v>
+                            </product>
+                        </sin>
+                    </sum>
+                    <property>systems/buffeting/magnitude</property>
+                </product>
+            </function>
+        </fcs_function>
+
+        <fcs_function name="propulsion/engine[0]/ftit-direct">
+            <function>
+                <sum>
+                    <product><!-- egt to deg celcius -->
+                        <difference>
+                            <property>propulsion/engine[0]/egt-degf</property>
+                            <v>32</v>
+                        </difference>
+                        <quotient>
+                            <v>5</v>
+                            <v>9</v>
+                        </quotient>
+                    </product>
+                    <product><!-- add some extra from thrust -->
+                        <value>250</value>
+                        <min>
+                            <value>1</value>
+                            <quotient>
+                                <property>propulsion/engine[0]/thrust-lb</property>
+                                <property>propulsion/engine[0]/rated-mil-dry</property>
+                            </quotient>
+                        </min>
+                    </product>
+                    <table><!-- add some extra while cranking -->
+                        <independentVar lookup="row">propulsion/engine[0]/n2</independentVar>
+                        <independentVar lookup="column">propulsion/engine[0]/cranking</independentVar>
+                        <tableData>
+                            0 1
+                            0 0 0
+                            20 0 400
+                            50 0 400
+                            60 0 200
+                            70 0 0
+                            100 0 0
+                        </tableData>
+                    </table>
+                </sum>
+            </function>
+        </fcs_function>
+
+        <lag_filter name="names/ftit-c">
+            <input> propulsion/engine[0]/ftit-direct </input>
+            <c1> 0.35 </c1>
+            <output>propulsion/engine[0]/ftit-degc</output>
+        </lag_filter>
+
+        <pure_gain name="velocities/psidot-deg_sec">
+            <input>velocities/psidot-rad_sec</input>
+            <gain> 57.29578 </gain>
+        </pure_gain>
+
+    </channel>
+</system>
