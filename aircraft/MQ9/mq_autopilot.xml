@@ -16,7 +16,7 @@
   <property> ap/alpha_setpoint </property>
 
   <property value="0"> fcs/heading-error-bias-switch  </property>
-  <property value="60"> ap/heading_setpoint  </property>
+  <property value="30"> ap/heading_setpoint  </property>
 
   <property value="1"> ap/alpha_hold     </property>
 
@@ -113,7 +113,7 @@ ROLL CHANNEL
 
   <pid name="fcs/heading-pi-controller">
     <input> fcs/heading-roll-error-switch </input>
-    <kp> 1.7 </kp>
+    <kp> 1.6</kp>
     <ki> 0 </ki>
     <kd> 0.5 </kd>
   </pid>
