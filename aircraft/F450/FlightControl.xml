@@ -31,29 +31,87 @@
 
     <pure_gain name="refPhi_rad">
       <input>fcs/pilotRoll_norm</input>
-      <gain>0.75</gain>
-      <!-- <output>fcs/refPhi_rad</output> -->
-      <output>fcs/refRoll_rps</output>
+      <gain>0.7</gain>
+      <output>fcs/refPhi_rad</output>
+      <!-- <output>fcs/refRoll_rps</output> -->
     </pure_gain>
     <pure_gain name="refTheta_rad">
       <input>fcs/pilotPitch_norm</input>
-      <gain>0.75</gain>
-      <!-- <output>fcs/refTheta_rad</output> -->
-      <output>fcs/refPitch_rps</output>
+      <gain>0.7</gain>
+      <output>fcs/refTheta_rad</output>
+      <!-- <output>fcs/refPitch_rps</output> -->
     </pure_gain>
     <pure_gain name="refYaw_rps">
       <input>fcs/pilotYaw_norm</input>
-      <gain>0.75</gain>
+      <gain>0.7</gain>
       <output>fcs/refYaw_rps</output>
+    </pure_gain>
+    <pure_gain name="refAlt_m">
+      <input>fcs/flap-pos-norm</input>
+      <gain>1.0</gain>
+      <output>fcs/refAlt_m</output>
     </pure_gain>
   </channel>
 
   <property value="0.0"> fcs/ScasEngage </property>
-  <property>fcs/cmdHeave_nd </property>
+  <property>fcs/cmdHeave_nd</property>
   <property>fcs/refPhi_rad</property>
   <property>fcs/refTheta_rad</property>
 
-  <!-- <channel name="InnerLoop-Attitude">
+
+  <channel name="Altitude-Hold">
+    <summer>
+      <input>fcs/refAlt_m</input>
+      <input>-position/h-sl-meters</input>
+      <output>fcs/errAlt_m</output>
+    </summer>
+
+    <pure_gain>
+      <input>fcs/errAlt_m</input>
+      <gain>fcs/ScasEngage</gain>
+      <output>fcs/errAlt_m</output>
+    </pure_gain>
+
+    <pid name="fcs/Alt_PID">
+      <input>fcs/errAlt_m</input>
+      <kp>4.75</kp>
+      <ki>0.5</ki>
+      <kd>2.30</kd>
+    </pid>
+
+    <pure_gain>
+      <input>inertia/mass-slugs</input>
+      <gain>14.5939</gain>
+      <output>inertia/mass-kg</output>
+    </pure_gain>
+
+    <pure_gain>
+      <input>fcs/Alt_PID</input>
+      <gain>inertia/mass-kg</gain>
+      <output>fcs/m_PID</output>
+    </pure_gain>
+
+    <pure_gain>
+      <input>inertia/mass-kg</input>
+      <gain>9.81</gain>
+      <output>fcs/mg</output>
+    </pure_gain>
+
+    <summer>
+      <input>fcs/mg</input>
+      <input>fcs/m_PID</input>
+      <output>fcs/force_4</output>
+    </summer>
+
+    <pure_gain>
+      <input>fcs/force_4</input>
+      <gain>0.007</gain>
+      <output>fcs/cmdHeave_nd</output>
+    </pure_gain>
+
+  </channel>
+
+  <channel name="InnerLoop-Attitude">
     <summer>
       <input>fcs/refPhi_rad</input>
       <input>-attitude/phi-rad</input>
@@ -68,9 +126,9 @@
 
     <pid name="fcs/refRoll_rps">
       <input>fcs/errPhi_rad</input>
-      <kp>0.500</kp>
+      <kp>1.5</kp>
       <ki>0.000</ki>
-      <kd>0.000</kd>
+      <kd>0.025</kd>
     </pid>
 
     <summer>
@@ -87,11 +145,11 @@
 
     <pid name="fcs/refPitch_rps">
       <input>fcs/errTheta_rad</input>
-      <kp>0.500</kp>
-      <ki>0.000</ki>
-      <kd>0.000</kd>
+      <kp>1.5</kp>
+      <ki>0.0</ki>
+      <kd>0.025</kd>
     </pid>
-  </channel> -->
+  </channel>
 
   <channel name="InnerLoop-Rates">
     <summer>
@@ -109,9 +167,9 @@
 
     <pid name="fcs/cmdRoll_rps">
       <input>fcs/errRoll_rps</input>
-      <kp>0.150</kp>
-      <ki>0.050</ki>
-      <kd>0.003</kd>
+      <kp>0.20</kp>
+      <ki>0.0</ki>
+      <kd>0.006</kd>
     </pid>
 
     <summer>
@@ -129,9 +187,9 @@
 
     <pid name="fcs/cmdPitch_rps">
       <input>fcs/errPitch_rps</input>
-      <kp>0.150</kp>
-      <ki>0.050</ki>
-      <kd>0.003</kd>
+      <kp>0.20</kp>
+      <ki>0.0</ki>
+      <kd>0.006</kd>
     </pid>
 
     <summer>
