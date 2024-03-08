@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
   File:     F100-PW-229.xml
-  Author:   Aero-Matic v 0.8
+  Author:   Data Machine Intelligence
 
   Inputs:
     name:           F100
@@ -9,6 +9,8 @@
     thrust:         17800 lb
     augmented?      yes
     injected?       no
+
+    Modified for MQ9 velocity improvement
 -->
 
 <turbine_engine name="F100">

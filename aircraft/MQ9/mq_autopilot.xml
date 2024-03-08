@@ -67,7 +67,7 @@ ROLL CHANNEL
 
   <summer name="fcs/heading-error">
     <input> -fcs/heading-true-degrees</input>
-    <input> fcs/heading-true-degrees </input>
+    <input> ap/heading_setpoint </input>
   </summer>
 
   <switch name="fcs/heading-error-bias-switch">
@@ -113,7 +113,7 @@ ROLL CHANNEL
 
   <pid name="fcs/heading-pi-controller">
     <input> fcs/heading-roll-error-switch </input>
-    <kp> 1.5 </kp>
+    <kp> 2.5 </kp>
     <ki> 0 </ki>
     <kd> 0.5 </kd>
   </pid>
@@ -147,7 +147,7 @@ ROLL CHANNEL
   <!-- Compute the error between the target alpha and the actual value -->
   <summer name="aero/alpha-error">
     <input> ap/alpha_setpoint </input>
-    <input> -attitude/pitch-rad </input>
+    <input> -flight-path/gamma-rad </input>
     <clipto>
       <min>-1.1</min>
       <max> 1.1</max>
@@ -156,9 +156,9 @@ ROLL CHANNEL
 
   <pid name="ap/elevator_cmd">
     <input> aero/alpha-error </input>
-    <kp> -1.5516 </kp>
-    <ki> 0.005 </ki>
-    <kd> 0.05 </kd>
+    <kp> -3.6 </kp>
+    <ki> -0.5 </ki>
+    <kd> -0.3 </kd>
     <clipto>
       <min> -1 </min>
       <max> 1</max>
