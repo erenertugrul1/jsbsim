@@ -16,7 +16,7 @@
   <property> ap/alpha_setpoint </property>
 
   <property value="0"> fcs/heading-error-bias-switch  </property>
-  <property value="0"> ap/heading_setpoint  </property>
+  <property value="60"> ap/heading_setpoint  </property>
 
   <property value="1"> ap/alpha_hold     </property>
 
@@ -84,14 +84,14 @@ ROLL CHANNEL
     <input> fcs/heading-error-bias-switch </input>
     <input> fcs/heading-error </input>
     <clipto>
-      <min>-30</min>
-      <max>30</max>
+      <min>-60</min>
+      <max>60</max>
     </clipto>
   </summer>
 
   <pure_gain name="fcs/heading-command">
     <input> fcs/heading-corrected </input>
-    <gain> 0.01745 </gain>
+    <gain> 0.03745 </gain>
   </pure_gain>
 
   <lag_filter name="fcs/heading-roll-error-lag">
@@ -113,7 +113,7 @@ ROLL CHANNEL
 
   <pid name="fcs/heading-pi-controller">
     <input> fcs/heading-roll-error-switch </input>
-    <kp> 2.5 </kp>
+    <kp> 1.7 </kp>
     <ki> 0 </ki>
     <kd> 0.5 </kd>
   </pid>
@@ -130,16 +130,16 @@ ROLL CHANNEL
     </test>
     <output>ap/aileron_cmd</output>
   </switch>
-<!--
+
   <switch name="fcs/roll-command-selector-steering">
     <default value="0.0"/>
     <test value="fcs/heading-pi-controller">
       ap/heading_hold == 1
       gear/unit/WOW == 1
     </test>
-    <output>fcs/steer-cmd-norm</output>
+    <output>ap/rudder_cmd</output>
   </switch>
--->
+
 </channel>
 
 
@@ -156,9 +156,9 @@ ROLL CHANNEL
 
   <pid name="ap/elevator_cmd">
     <input> aero/alpha-error </input>
-    <kp> -3.6 </kp>
-    <ki> -0.5 </ki>
-    <kd> -0.3 </kd>
+    <kp> -2.7 </kp>
+    <ki> -0.4 </ki>
+    <kd> -0.1 </kd>
     <clipto>
       <min> -1 </min>
       <max> 1</max>

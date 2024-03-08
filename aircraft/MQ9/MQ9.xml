@@ -120,7 +120,7 @@
        <z> -10.83 </z>
      </location>
      <capacity unit="LBS"> 776.56 </capacity>
-     <contents unit="LBS"> 388.28 </contents>
+     <contents unit="LBS"> 776.56 </contents>
   </tank>
 
   <tank type="FUEL" number="1">
