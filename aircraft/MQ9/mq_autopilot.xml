@@ -156,9 +156,9 @@ ROLL CHANNEL
 
   <pid name="ap/elevator_cmd">
     <input> aero/alpha-error </input>
-    <kp> -3.6 </kp>
-    <ki> -0.5 </ki>
-    <kd> -0.3 </kd>
+    <kp> -2.7</kp>
+    <ki> -0.4</ki>
+    <kd> -0.1</kd>
     <clipto>
       <min> -1 </min>
       <max> 1</max>
