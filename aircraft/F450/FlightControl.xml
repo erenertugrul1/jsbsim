@@ -21,17 +21,17 @@
       <output>fcs/pilotYaw_norm</output>
     </summer>
 
-    <pure_gain name="fcs/refY_m">
+    <pure_gain name="fcs/refPhi_rad">
       <input>fcs/pilotRoll_norm</input>
-      <gain>50.0</gain>
-      <output>fcs/refY_m</output>
-      <!-- <output>fcs/refRoll_rps</output> -->
+      <gain>1.0</gain>
+      <!-- <output>fcs/refY_m</output>-->
+      <output>fcs/refPhi_rad</output>
     </pure_gain>
-    <pure_gain name="fcs/refX_m">
+    <pure_gain name="fcs/refTheta_rad">
       <input>fcs/pilotPitch_norm</input>
-      <gain>-50.0</gain>
-      <output>fcs/refX_m</output>
-      <!-- <output>fcs/refPitch_rps</output> -->
+      <gain>1.0</gain>
+      <!--<output>fcs/refX_m</output>-->
+       <output>fcs/refTheta_rad</output>
     </pure_gain>
     <pure_gain name="refYaw_rps">
       <input>fcs/pilotYaw_norm</input>
@@ -108,125 +108,6 @@
 
   </channel>
 
-  <channel name="Position-Hold">
-
-    <summer>
-      <input>fcs/refY_m</input>
-      <input>-position/distance-from-start-lon-mt</input>
-      <output>fcs/errY_m</output>
-    </summer>
-
-    <pure_gain>
-      <input>fcs/errY_m</input>
-      <gain>fcs/ScasEngage</gain>
-      <output>fcs/errY_m</output>
-    </pure_gain>
-
-    <pure_gain>
-      <input>velocities/h-dot-fps</input>
-      <gain>0.3014</gain>
-      <output>fcs/az-mps</output>
-    </pure_gain>
-
-    <switch name="fcs/pid-des-az">
-      <default value="fcs/az-mps"/>
-      <test value="9.81">
-       fcs/az-mps lt 5
-       fcs/az-mps gt -5
-      </test>
-    </switch>
-
-    <pure_gain>
-      <input>velocities/v-fps</input>
-      <gain>0.3048</gain>
-      <output>fcs/errVy</output>
-    </pure_gain>
-
-    <pid name="fcs/pid-errY">
-      <input>fcs/refY_m</input>
-      <kp>1</kp>
-      <ki>0.0</ki>
-      <kd>0.01</kd>
-    </pid>
-
-    <pid name="fcs/pid-errVy">
-      <input>fcs/errVy</input>
-      <kp>0</kp>
-      <ki>0.0</ki>
-      <kd>0</kd>
-    </pid>
-
-    <summer>
-      <input>fcs/pid-errVy</input>
-      <input>fcs/pid-errY</input>
-      <output>fcs/pid-des-ay</output>
-    </summer>
-
-    <summer>
-      <input>fcs/refX_m</input>
-      <input>-position/distance-from-start-lat-mt</input>
-      <output>fcs/errX_m</output>
-    </summer>
-
-    <pure_gain>
-      <input>velocities/u-fps</input>
-      <gain>0.3048</gain>
-      <output>fcs/errVx</output>
-    </pure_gain>
-
-    <pid name="fcs/pid-errX">
-      <input>fcs/refX_m</input>
-      <kp>1</kp>
-      <ki>0.0</ki>
-      <kd>0.01</kd>
-    </pid>
-
-    <pid name="fcs/pid-errVx">
-      <input>fcs/errVx</input>
-      <kp>0</kp>
-      <ki>0.0</ki>
-      <kd>0</kd>
-    </pid>
-
-    <summer>
-      <input>fcs/pid-errVx</input>
-      <input>fcs/pid-errX</input>
-      <output>fcs/pid-des-ax</output>
-    </summer>
-
-    <fcs_function name="fcs/refTheta_rad">
-      <function>
-        <atan2>
-          <property>fcs/pid-des-ax</property>
-          <property>fcs/pid-des-az</property>
-        </atan2>
-      </function>
-      <clipto>
-        <min>-0.5</min>
-        <max>0.5</max>
-      </clipto>
-    </fcs_function>
-
-    <fcs_function name="fcs/refPhi_rad">
-      <function>
-        <atan2>
-          <product>
-            <cos><property>attitude/theta-rad</property></cos>
-            <product>
-              <property>fcs/pid-des-ay</property>
-              <value>-1</value>
-            </product>
-          </product>
-          <property>fcs/pid-des-az</property>
-        </atan2>
-      </function>
-      <clipto>
-        <min>-0.5</min>
-        <max>0.5</max>
-      </clipto>
-    </fcs_function>
-
-  </channel>
 
   <channel name="InnerLoop-Attitude">
     <summer>
